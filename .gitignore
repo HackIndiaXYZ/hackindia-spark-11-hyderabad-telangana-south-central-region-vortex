@@ -13,9 +13,19 @@ build/
 .env
 .env.local
 .env.production
+.env.*.local
 
 # Logs
 *.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local database
+sahachaara.db
 
 # IDE
 .vscode/
@@ -26,8 +36,54 @@ build/
 Thumbs.db
 
 # Coverage
-coverage/__pycache__/ 
-*.pyc 
-sahachaara.db 
-.env 
-.env.local 
+.coverage
+htmlcov/
+
+# VuePress
+.vuepress/dist
+.temp
+
+# SvelteKit
+.svelte-kit/
+
+# VitePress
+**/.vitepress/dist
+**/.vitepress/cache
+
+# Docusaurus
+.docusaurus
+
+# Serverless
+.serverless/
+
+# FuseBox
+.fusebox/
+
+# DynamoDB Local
+.dynamodb/
+
+# Firebase
+.firebase/
+
+# TernJS
+.tern-port
+
+# VSCode test
+.vscode-test
+
+# pnpm
+.pnpm-store
+
+# Yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+.vite/
