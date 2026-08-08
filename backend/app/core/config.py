@@ -28,5 +28,15 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
     ]
 
+    # Gemini AI & Debug Settings
+    gemini_api_key: str = ""
+    gemini_primary_model: str = "gemini-3.5-flash"
+    gemini_fallback_models: str = "gemini-3.5-flash-lite,gemini-3.1-flash-lite"
+    debug_ai: bool = True
+    demo_mode: bool = False
+    next_public_api_url: str = "http://localhost:8000"
+
 
 settings = Settings()
+
+

@@ -26,4 +26,8 @@ build/
 Thumbs.db
 
 # Coverage
-coverage/
+coverage/__pycache__/ 
+*.pyc 
+sahachaara.db 
+.env 
+.env.local 

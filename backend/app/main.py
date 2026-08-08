@@ -1,7 +1,28 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
+from app.services.model_manager import model_manager
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup verification of Gemini models via ModelManager
+    await model_manager.verify_models_startup()
+    
+    # Auto-create database tables on startup
+    try:
+        from app.models.base import Base
+        from app.core.database import engine
+        import app.models  # ensure models are registered
+        Base.metadata.create_all(bind=engine)
+        print("[+] Database tables initialized successfully")
+    except Exception as db_err:
+        print(f"[-] Database auto-creation error: {db_err}")
+        
+    yield
+
 
 app = FastAPI(
     title=settings.app_name,
@@ -10,6 +31,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",
+    lifespan=lifespan,
 )
 
 # ─── CORS ─────────────────────────────────────────────────────────────────────
@@ -40,7 +62,9 @@ async def root() -> dict:
     return {"message": f"Welcome to {settings.app_name} API", "docs": "/docs"}
 
 
-# ─── Routers (add as modules are built) ───────────────────────────────────────
-# from app.routers import auth, trips, companion
-# app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
-# app.include_router(trips.router, prefix="/api/v1/trips", tags=["Trips"])
+# ─── Routers ──────────────────────────────────────────────────────────────────
+from app.routers import ai, navigation, safety
+
+app.include_router(ai.router, prefix="/api/v1/ai", tags=["Saha AI Companion"])
+app.include_router(navigation.router, prefix="/api/v1/navigation", tags=["Navigation & Journey Support"])
+app.include_router(safety.router, prefix="/api/v1/safety", tags=["Safety & Crowdsourcing"])
